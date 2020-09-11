@@ -2,13 +2,23 @@ import { Controller, Inject } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
 import { Profile } from './profile.entity';
-import { Repository } from 'typeorm';
+import { Column, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProfileSubscriber } from './profile.subscriber';
 import { filter, map } from 'rxjs/operators';
 
 // TODO: add docker
 // TODO: add hash
+
+interface ProfileDTO {
+  name: string;
+  email: string;
+  password: string;
+}
+
+interface ProfileByNameRequest {
+  name: string;
+}
 @Controller('profile')
 export class ProfileController {
 
@@ -21,7 +31,7 @@ export class ProfileController {
   }
 
   @GrpcMethod('ProfileService', 'edit')
-  edit(profile: any) {
+  edit(profile: ProfileDTO) {
     const res = this.profileRepository.merge(profile);
     return from(this.profileRepository.save(res))
       .pipe(
@@ -31,8 +41,8 @@ export class ProfileController {
 
 
   @GrpcMethod('ProfileService', 'getByName')
-  getByName({ name }: any): Observable<any> {
-    const subject = new Observable<Profile>(subscriber => {
+  getByName({ name }: ProfileByNameRequest): Observable<ProfileDTO> {
+    const subject = new Observable<ProfileDTO>(subscriber => {
       this.profileSubscriber.addSubscriber(subscriber);
     })
       .pipe(
