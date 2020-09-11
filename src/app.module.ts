@@ -9,7 +9,7 @@ import { ProfileSubscriber } from './profile/profile.subscriber';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'db',
       port: 5432,
       username: 'postgres',
       password: 'admin',

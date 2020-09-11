@@ -9,6 +9,7 @@ async function bootstrap() {
     options: {
       package: 'profile',
       protoPath: join(__dirname, '../src/profile/profile.proto'),
+      url: '0.0.0.0:3000'
     },
   });
   app.listen(() => {
