@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package profile;
+
+
+service ProfileService {
+  rpc edit (Profile) returns (Empty) {}
+  rpc getByName (ProfileByName) returns (stream Profile) {}
+}
+
+message ProfileByName {
+  string name = 1;
+}
+
+message Profile {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message Empty {
+}
